@@ -46,7 +46,7 @@ propensity_to_buy_range = []
 
 def main():
     create_product_list()
-    #generate_sales()
+    generate_sales()
 
 
 # create products and propensity_to_buy lists from CSV data file
@@ -83,7 +83,7 @@ def create_product_list():
         #print(b)
         #print(type(b))
         #print("Value: {0}".format(new2_product))
-        publish_to_kafka(topic_products, new_products)
+        #publish_to_kafka(topic_products, new_products)
         propensity_to_buy_range.append(int(p[14]))
     propensity_to_buy_range.sort()
 
@@ -126,7 +126,14 @@ def generate_sales():
                         add_supplement,
                         supplement_price,
                     )
-                    publish_to_kafka(topic_purchases, new_purchase)
+                    x = "{"
+                    y = "}"
+                    a = f"{x}{new_purchase}{y}"
+                    #print(a)
+                    new_purchases = json.dumps(a)
+                    #b = json.dumps(a)
+                    #new_purchases = b
+                    publish_to_kafka(topic_purchases, new_purchases)
                     p.inventory_level = p.inventory_level - quantity
                     if p.inventory_level <= min_inventory:
                         restock_item(p.product_id)
@@ -147,7 +154,12 @@ def restock_item(product_id):
                 new_level,
             )
             p.inventory_level = new_level  # update existing product item
-            publish_to_kafka(topic_inventories, new_inventory)
+
+            x = "{"
+            y = "}"
+            a = f"{x}{new_inventory}{y}"
+            new_inventories = json.dumps(a)
+            publish_to_kafka(topic_inventories, new_inventories)
             break
 
 

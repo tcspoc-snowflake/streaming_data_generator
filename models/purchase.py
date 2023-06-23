@@ -26,9 +26,9 @@ class Purchase:
 
     def __str__(self):
         return (
-            "Purchase: transaction_time: {0}, transaction_id: {1}, product_id: {2}, quantity: {3:.0f}, "
-            "price: ${4:.2f}, add_supplements: {5}, supplement_price: ${6:.2f}, is_member: {7}, "
-            "member_discount: {8:.0%}, total: ${9:.2f}".format(
+            """ "transaction_time": "{0}", "transaction_id": "{1}", "product_id": "{2}", "quantity": "{3:.0f}", 
+        "price": "${4:.2f}", "add_supplements": "{5}", "supplement_price": "${6:.2f}", "is_member": "{7}", 
+        "member_discount": "{8:.0%}", "total": "${9:.2f}" """.format(
                 self.transaction_time,
                 self.transaction_id,
                 self.product_id,
