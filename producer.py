@@ -72,7 +72,9 @@ def create_product_list():
             p[14],
         )
         products.append(new_product)
-        publish_to_kafka(topic_products, new_product)
+        #publish_to_kafka(topic_products, new_product)
+        new2_product = json.dumps(new_product).encode("utf-8")
+        print("Value: {0}".format(new2_product))
         propensity_to_buy_range.append(int(p[14]))
     propensity_to_buy_range.sort()
 
@@ -154,7 +156,7 @@ def publish_to_kafka(topic, message):
         #**
         configs
     )
-    producer.produce(topic)
+    producer.produce(topic,)
     print("Topic: {0}, Value: {1}".format(topic, message))
     producer.flush()
 

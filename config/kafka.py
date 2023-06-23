@@ -15,6 +15,7 @@ def get_configs():
     if auth_method == "sasl_scram":
         configs["security.protocol"] = "SASL_SSL"
         configs["sasl.mechanisms"] = "PLAIN"
+        #configs["ssl.ca.location"] = "CARoot.pem"
         configs["sasl.username"] = sasl_username
         configs["sasl.password"] = sasl_password
 
