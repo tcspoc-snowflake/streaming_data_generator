@@ -4,6 +4,7 @@ import random
 import time
 from csv import reader
 from datetime import datetime
+import uuid
 
 #from kafka import KafkaProducer
 from confluent_kafka import Producer
@@ -73,8 +74,16 @@ def create_product_list():
         )
         products.append(new_product)
         #publish_to_kafka(topic_products, new_product)
-        new2_product = json.dumps(new_product).encode("utf-8")
-        print("Value: {0}".format(new2_product))
+        #new2_product = json.dumps(new_product).encode("utf-8")
+        #print(new_product)
+        x = "{"
+        y = "}"
+        a = f"{x}{new_product}{y}"
+        new_products = json.dumps(a)
+        #print(b)
+        #print(type(b))
+        #print("Value: {0}".format(new2_product))
+        publish_to_kafka(topic_products, new_products)
         propensity_to_buy_range.append(int(p[14]))
     propensity_to_buy_range.sort()
 
@@ -142,22 +151,22 @@ def restock_item(product_id):
             break
 
 
-def json_serializer(message,s_obj):
-    return json.dumps(message).encode("utf-8")
+#def json_serializer(message,s_obj):
+#    return json.dumps(message).encode("utf-8")
     
 
 # serialize object to json and publish message to kafka topic
 def publish_to_kafka(topic, message):
     configs = get_configs()
-    configs["value.serializer"] = json_serializer
+    #configs["value.serializer"] = json_serializer
 
-    producer = SerializingProducer(
+    producer = Producer(
         #value_serializer=lambda v: json.dumps(vars(v)).encode("utf-8"),
-        #**
-        configs
+        **configs
     )
-    producer.produce(topic,)
-    print("Topic: {0}, Value: {1}".format(topic, message))
+    uid = uuid.uuid4()
+    producer.produce(topic,key=str(uid).encode("utf-8"),value=message)
+    print("Topic: {0},Key:{1} ,Value: {2}".format(topic,str(uid).encode("utf-8"),message))
     producer.flush()
 
 
